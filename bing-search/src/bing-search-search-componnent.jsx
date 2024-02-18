@@ -11,7 +11,7 @@ const BingSearchComponent = () => {
         event.preventDefault(); 
         setIsLoading(true);
 
-        const apiKey = 'b734b206fdb64c1cbd8759397bf7c51e';
+        const apiKey = 'xxxxxxxx';
         const url = `https://api.bing.microsoft.com/v7.0/search?q=${query}&count=100`;
         
         try {
