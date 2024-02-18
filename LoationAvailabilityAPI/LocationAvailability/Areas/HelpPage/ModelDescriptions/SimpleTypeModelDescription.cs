@@ -1,0 +1,6 @@
+namespace LocationAvailability.Areas.HelpPage.ModelDescriptions
+{
+    public class SimpleTypeModelDescription : ModelDescription
+    {
+    }
+}
