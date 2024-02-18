@@ -8,16 +8,15 @@ using System.Web;
 namespace LocationAvailability.Models
 {
     public class CsvFileService : ICsvFileService
-    {
-        private AppDbcontext db;
-
-        public CsvFileService(AppDbcontext dbContext)
+    {     
+        private readonly IDbContext _dbContext;
+        public CsvFileService(IDbContext dbContext)
         {
-            db = dbContext;
+            _dbContext = dbContext;
         }
         public async Task<CsvFile> GetCsvFileByNameAsync(string fileName)
         {
-            return await db.CsvFiles.FirstOrDefaultAsync(f => f.FileName == fileName);
+            return await _dbContext.CsvFiles.FirstOrDefaultAsync(f => f.FileName == fileName);
         }
 
     }

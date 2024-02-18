@@ -6,7 +6,7 @@ using System.Web;
 
 namespace LocationAvailability.Models
 {
-    public class AppDbcontext: DbContext
+    public class AppDbcontext: DbContext, IDbContext
     {
         public AppDbcontext() : base("LocationConnectionString")
         {

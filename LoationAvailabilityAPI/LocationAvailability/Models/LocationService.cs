@@ -7,16 +7,15 @@ namespace LocationAvailability.Models
 {
     public class LocationService : ILocationService
     {
-        private AppDbcontext db;
-
-        public LocationService(AppDbcontext dbContext)
+        private readonly IDbContext _dbContext;
+        public LocationService(IDbContext dbContext)
         {
-            db = dbContext;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<Locations> GetAllLocations()
         {
-            return db.Locations.ToList();
+            return _dbContext.Locations.ToList();
         }
 
         public IEnumerable<Locations> GetLocationsByAvailability(string from, string to)
@@ -42,8 +41,8 @@ namespace LocationAvailability.Models
         public Locations AddLocation(Locations newLocation)
         {
             // Add the new location to the database
-            db.Locations.Add(newLocation);
-            db.SaveChanges();
+            _dbContext.Locations.Add(newLocation);
+            _dbContext.SaveChangesAsync();
 
             // Return the newly added location
             return newLocation;
@@ -55,9 +54,23 @@ namespace LocationAvailability.Models
 
         private TimeSpan ParseTimeString(string timeString)
         {
-            var timeFormat = timeString.EndsWith("am", StringComparison.OrdinalIgnoreCase) ? "hhtt" : "hhtt";
-            var time = DateTime.ParseExact(timeString, timeFormat, System.Globalization.CultureInfo.InvariantCulture);
-            return time.TimeOfDay;
+            int hour =0;
+            if (int.TryParse(timeString.TrimEnd("amp".ToCharArray()), out hour))
+            {
+                if (timeString.EndsWith("pm", StringComparison.OrdinalIgnoreCase) && hour < 12)
+                {
+                    hour += 12;
+                }
+                else if (timeString.EndsWith("am", StringComparison.OrdinalIgnoreCase) && hour == 12)
+                {
+                    hour = 0;
+                }              
+
+                //var timeFormat = timeString.EndsWith("am", StringComparison.OrdinalIgnoreCase) ? "hhtt" : "hhtt";
+                //var time = DateTime.ParseExact(timeString, timeFormat, System.Globalization.CultureInfo.InvariantCulture);
+                //return time.TimeOfDay;
+            }
+            return TimeSpan.FromHours(hour);
         }
 
         private string ConvertTimeSpanToString(TimeSpan timeSpan)
