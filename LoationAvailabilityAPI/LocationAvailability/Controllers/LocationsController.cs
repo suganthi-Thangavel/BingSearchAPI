@@ -14,6 +14,10 @@ namespace LocationAvailability.Controllers
     {
         private ILocationService locationService;
 
+        public LocationsController()
+        {
+
+        }
         public LocationsController(ILocationService service)
         {
             locationService = service;
